@@ -3,6 +3,7 @@ import os
 import sys
 import re
 import string
+import spacy
 
 from itertools import izip
 from time import time
@@ -39,7 +40,35 @@ class Tagger(Process):
         for c in globals().itervalues():
             if c != cls and isinstance(c, type) and issubclass(c, cls):
                 yield c
-
+                
+class WhitespaceTokenizer(object):
+    def __init__(self, nlp):
+        self.vocab = nlp.vocab
+    def __call__(self, text):
+        words = text.split(' ')
+        # All tokens 'own' a subsequent space character in this tokenizer
+        spaces = [True] * len(words)
+        return Doc(self.vocab, words=words, spaces=spaces)
+    
+class SpacyTagger(Tagger):
+    def __init__(self):
+        self.nlp = spacy.load("en",create_make_doc=WhitespaceTokenizer)
+      
+    def to_unicode(input_string):
+        start_space = re.compile("^\s")
+        multiple_space = re.compile("\s+")
+        input_string = multiple_space.sub(' ', input_string)
+        input_string = start_space.sub('', input_string)
+        if isinstance(input_string, str):
+            return input_string.decode(encoding)
+        return input_string
+    
+    def tag(self, doc):
+        text = to_unicode(doc.text)
+        text = self.nlp(text)
+        for ent in text.ents:
+            yield self.mention_over_tokens(text, ent.start, ent.end, ent.label_)
+                
 class CRFTagger(Tagger):
     """ Conditional random field sequence tagger """
     @classmethod
