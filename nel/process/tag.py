@@ -63,12 +63,13 @@ class SpacyTagger(Tagger):
         if isinstance(input_string, str):
             return input_string.decode(encoding)
         return input_string
-    
+        
     def tag(self, doc):
         text = self.to_unicode(doc.text)
         text = self.nlp(text)
+        doc.tokens = [word.text for word in text]
         for ent in text.ents:
-            yield self.mention_over_tokens(text, ent.start, ent.end, ent.label_)
+            yield Mention(ent.start_char, ent.text, ent.label_)
                 
 class CRFTagger(Tagger):
     """ Conditional random field sequence tagger """
