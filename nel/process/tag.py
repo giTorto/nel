@@ -54,7 +54,7 @@ class SpacyTagger(Tagger):
     def __init__(self):
         self.nlp = spacy.load("en",create_make_doc=WhitespaceTokenizer)
       
-    def to_unicode(self,input_string):
+    def to_unicode(self, input_string, encoding='utf8'):
         start_space = re.compile("^\s")
         multiple_space = re.compile("\s+")
         input_string = multiple_space.sub(' ', input_string)
