@@ -15,6 +15,7 @@ from .process import Process
 from ..model import recognition
 from ..doc import Mention, Chain, Candidate
 from ..util import group, spanset_insert, tcp_socket, byte_to_char_map
+from spacy.tokens import Doc
 
 from nel import logging
 log = logging.getLogger()
