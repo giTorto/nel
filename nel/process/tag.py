@@ -64,7 +64,7 @@ class SpacyTagger(Tagger):
         return input_string
     
     def tag(self, doc):
-        text = to_unicode(doc.text)
+        text = self.to_unicode(doc.text)
         text = self.nlp(text)
         for ent in text.ents:
             yield self.mention_over_tokens(text, ent.start, ent.end, ent.label_)
