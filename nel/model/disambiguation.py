@@ -50,6 +50,7 @@ class NameProbability(object):
             yield item['counts'] if item else {}
 
     def get_counts_for_names(self, names):
+        print names
         return dict(izip(names, self.iter_counts_for_names(names)))
 
     def get_probs_for_names(self, names):
