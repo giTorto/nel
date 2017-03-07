@@ -46,6 +46,7 @@ class NameProbability(object):
 
     def iter_counts_for_names(self, names):
         for item in self.store.fetch_many(names):
+            print item
             yield item['counts'] if item else {}
 
     def get_counts_for_names(self, names):
