@@ -52,8 +52,11 @@ class WhitespaceTokenizer(object):
         return Doc(self.vocab, words=words, spaces=spaces)
     
 class SpacyTagger(Tagger):
-    def __init__(self):
-        self.nlp = spacy.load("en",create_make_doc=WhitespaceTokenizer)
+    def __init__(self, tokenizer=None):
+        if tokenizer is None:
+            self.nlp = spacy.load("en")
+        else:
+            self.nlp = spacy.load("en",create_make_doc=tokenizer)
       
     def to_unicode(self, input_string, encoding='utf8'):
         start_space = re.compile("^\s")
