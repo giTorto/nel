@@ -61,6 +61,9 @@ class Mention(object):
         self.tag = tag
         self.mid = mid
         self.resolution = resolution
+        self.token_id_start = None
+        self.token_id_end = None
+        self.sentence_id = None
 
     def json(self):
         return {
