@@ -67,10 +67,13 @@ class SpacyTagger(Tagger):
             return input_string.decode(encoding)
         return input_string
     
-    def get_me_sentence_id(self, ent, doc):
+    def update_sentence_id(self, ent, doc, m):
         for i,sent in enumerate(doc.sents):
             if ent.start >= sent.start and ent.end <= sent.end:
-                return i
+                m.sentence_id = i
+                m.token_id_end = ent.end - sent.start
+                m.token_id_start = ent.start - sent.start
+                return m
         
     def tag(self, doc):
         text = self.to_unicode(doc.text)
@@ -79,9 +82,7 @@ class SpacyTagger(Tagger):
         for ent in text.ents:
             if ent.label_ not in set([u'DATE', u'TIME', u'PERCENT',u'MONEY',u'QUANTITY',u'ORDINAL',u'CARDINAL']):
                 m = Mention(ent.start_char, ent.text, ent.label_)
-                m.token_id_start = ent.start
-                m.token_id_end = ent.end
-                m.sentence_id = self.get_me_sentence_id(ent, text)
+                self.update_sentence_id(ent, text, m)
                 yield m
                 
 class CRFTagger(Tagger):
