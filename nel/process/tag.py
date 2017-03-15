@@ -69,7 +69,7 @@ class SpacyTagger(Tagger):
     
     def get_me_sentence_id(self, ent, doc):
         for i,sent in enumerate(doc.sents):
-            if ent.start >= sent.start:
+            if ent.start >= sent.start and ent.end <= sent.end:
                 return i
         
     def tag(self, doc):
