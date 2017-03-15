@@ -73,7 +73,10 @@ class SpacyTagger(Tagger):
         doc.tokens = [word.text for word in text]
         for ent in text.ents:
             if ent.label_ not in set([u'DATE', u'TIME', u'PERCENT',u'MONEY',u'QUANTITY',u'ORDINAL',u'CARDINAL']):
-                yield Mention(ent.start_char, ent.text, ent.label_)
+                m = Mention(ent.start_char, ent.text, ent.label_)
+                m.token_id_start = ent.start
+                m.token_id_end = ent.end
+                yield m
                 
 class CRFTagger(Tagger):
     """ Conditional random field sequence tagger """
