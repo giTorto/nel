@@ -66,6 +66,11 @@ class SpacyTagger(Tagger):
         if isinstance(input_string, str):
             return input_string.decode(encoding)
         return input_string
+    
+    def get_me_sentence_id(self, ent, doc):
+        for i,sent in enumerate(doc.sents):
+            if ent.start >= sent.start:
+                return i
         
     def tag(self, doc):
         text = self.to_unicode(doc.text)
@@ -76,6 +81,7 @@ class SpacyTagger(Tagger):
                 m = Mention(ent.start_char, ent.text, ent.label_)
                 m.token_id_start = ent.start
                 m.token_id_end = ent.end
+                m.sentence_id = self.get_me_sentence_id(ent, text)
                 yield m
                 
 class CRFTagger(Tagger):
